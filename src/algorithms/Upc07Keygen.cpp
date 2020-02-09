@@ -99,11 +99,10 @@ QVector<QString> & Upc07Keygen::getKeys() {
     quint32 hv[4], w1, w2, i, j;
     int mode;
     QString pass;
-    bool ok;
 
     QString ssid7 = getSsidName().right(7);
-    target = ssid7.toInt(&ok, 10);
-    if (!ok)
+    target = strtoul(ssid7.toLatin1(), NULL, 0);
+    if (!target)
         throw ERROR;
         
     const unsigned int prefix_cnt = sizeof(prefixes) / sizeof(prefixes[0]);
