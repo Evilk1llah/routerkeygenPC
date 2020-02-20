@@ -40,6 +40,7 @@
 #include "algorithms/BssidKeygen.h"
 #include "algorithms/Upc07Keygen.h"
 #include "algorithms/Upc07UbeeKeygen.h"
+#include "algorithms/Twg8x0Keygen.h"
 #include "algorithms/Tpw4gKeygen.h"
 #include "algorithms/PldtKeygen.h"
 #include "algorithms/BaseXKeygen.h"
@@ -673,6 +674,45 @@ private slots:
             }
         }
         QVERIFY2(found, "TVROBKMN was not found");
+    }
+
+    void testTwg8x0() {
+        QScanResult wifi("UPC016440", "11:22:33:44:55:66");
+        wifi.checkSupport(matcher);
+        QVector<Keygen *> * keygens = wifi.getKeygens();
+        QVERIFY2(keygens->size() != 0 , "An algorithm was not detected");
+        QCOMPARE(typeid(*(keygens->at(0))), typeid(Twg8x0Keygen) );
+        Keygen * keygen = keygens->at(0);
+        QVector<QString> results = keygen->getResults();
+        QCOMPARE(results.size(),18000);
+        bool found = false;
+        for ( int i = 0; i < results.size() ; ++i ) {
+            if (  results.at(i) == "KGAAKZKI" ) {
+                found = true;
+                break;
+            }
+        }
+        QVERIFY2(found, "KGAAKZKI was not found for algo TWG850 UPCxxxxxx");
+    }
+
+    void testTwg8x02() {
+        QScanResult wifi("UPC0042184", "11:22:33:44:55:66");
+        wifi.checkSupport(matcher);
+        QVector<Keygen *> * keygens = wifi.getKeygens();
+        QVERIFY2(keygens->size() == 2 , "The algorithms were not detected");
+        QCOMPARE(typeid(*(keygens->at(0))), typeid(Upc07Keygen) );
+        QCOMPARE(typeid(*(keygens->at(1))), typeid(Twg8x0Keygen) );
+        Keygen * keygen = keygens->at(1);
+        QVector<QString> results = keygen->getResults();
+        QCOMPARE(results.size(),4059);
+        bool found = false;
+        for ( int i = 0; i < results.size() ; ++i ) {
+            if (  results.at(i) == "LAAXDDUG" ) {
+                found = true;
+                break;
+            }
+        }
+        QVERIFY2(found, "LAAXDDUG was not found for algo TWG870 UPCxxxxxxx");
     }
 
     void testTpw4g() {
