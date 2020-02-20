@@ -62,6 +62,7 @@
 #include "algorithms/BssidKeygen.h"
 #include "algorithms/Upc07Keygen.h"
 #include "algorithms/Upc07UbeeKeygen.h"
+#include "algorithms/Twg8x0Keygen.h"
 #include "algorithms/Tpw4gKeygen.h"
 #include "algorithms/PldtKeygen.h"
 #include "algorithms/BaseXKeygen.h"
@@ -643,8 +644,15 @@ QVector<Keygen *> * WirelessMatcher::getKeygens(QString ssid, QString mac) {
 
     if (mac.startsWith("64:7C:34")) {
         keygens->append(new Upc07UbeeKeygen(ssid, mac));
-    } else if (ssid.count(QRegExp("^UPC[0-9]{7}$")) == 1) {
+    }
+    if (ssid.count(QRegExp("^UPC[0-9]{7}$")) == 1) {
         keygens->append(new Upc07Keygen(ssid, mac));
+    }
+    if (ssid.count(QRegExp("^(U|C)PC[0-9]{7}$")) == 1) {
+        keygens->append(new Twg8x0Keygen(ssid, mac, 1));
+    }
+    if (ssid.count(QRegExp("^UPC[0-9]{6}$")) == 1) {
+        keygens->append(new Twg8x0Keygen(ssid, mac, 0));
     }
 
     if (ssid.count(QRegExp("^TPW4G_[0-9A-F]{6}$")) == 1)
