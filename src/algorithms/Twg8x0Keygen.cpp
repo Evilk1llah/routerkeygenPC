@@ -21,6 +21,7 @@
 
 #include "Twg8x0Keygen.h"
 #include <QRegExp>
+#include <stdio.h>
 
 Twg8x0Keygen::Twg8x0Keygen(QString ssid, QString mac, unsigned short int var) :
 		Keygen(ssid, mac) {
